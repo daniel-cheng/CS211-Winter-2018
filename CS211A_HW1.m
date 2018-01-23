@@ -171,3 +171,17 @@ figure
 imshow(imresize(sub_img8, 256))
 title('1*1')
 size(sub_img8); % should be 1
+
+
+%% Part3
+%Step 1 - Generate filter and convolve with existing Gaussian pyramid
+threshold_variance=0.2;
+img_edge0=edges(double_img,threshold_variance);
+img_edge1=edges(sub_img1,threshold_variance);
+img_edge2=edges(sub_img2,threshold_variance);
+img_edge3=edges(sub_img3,threshold_variance);
+img_edge4=edges(sub_img4,threshold_variance);
+img_edge5=edges(sub_img5,threshold_variance);
+img_edge6=edges(sub_img6,threshold_variance);
+img_edge7=edges(sub_img7,threshold_variance);
+img_edge8=edges(sub_img8,threshold_variance);
