@@ -3,13 +3,13 @@ function part4(img1,img2,path,save_images)
     save_images_override = 0;
     box_filter=[1/4,1/4;1/4,1/4];
     [img1_gauss0, img1_gauss1, img1_gauss2, img1_gauss3, img1_gauss4, img1_gauss5, img1_gauss6, img1_gauss7, img1_gauss8] = ...
-        part1(img1, box_filter, save_images_override);
+        part1(img1, box_filter, 'img1', save_images_override);
     [img1_lap0, img1_lap1, img1_lap2, img1_lap3, img1_lap4, img1_lap5, img1_lap6, img1_lap7] = ...
-        part2(img1_gauss0, img1_gauss1, img1_gauss2, img1_gauss3, img1_gauss4, img1_gauss5, img1_gauss6, img1_gauss7, img1_gauss8, save_images_override);
+        part2(img1_gauss0, img1_gauss1, img1_gauss2, img1_gauss3, img1_gauss4, img1_gauss5, img1_gauss6, img1_gauss7, img1_gauss8, 'img1', save_images_override);
     [img2_gauss0, img2_gauss1, img2_gauss2, img2_gauss3, img2_gauss4, img2_gauss5, img2_gauss6, img2_gauss7, img2_gauss8] = ...
-        part1(img2, box_filter, save_images_override);
+        part1(img2, box_filter, 'img2', save_images_override);
     [img2_lap0, img2_lap1, img2_lap2, img2_lap3, img2_lap4, img2_lap5, img2_lap6, img2_lap7] = ...
-        part2(img2_gauss0, img2_gauss1, img2_gauss2, img2_gauss3, img2_gauss4, img2_gauss5, img2_gauss6, img2_gauss7, img2_gauss8, save_images_override);
+        part2(img2_gauss0, img2_gauss1, img2_gauss2, img2_gauss3, img2_gauss4, img2_gauss5, img2_gauss6, img2_gauss7, img2_gauss8, 'img2', save_images_override);
     show_and_save(img1,[path 'img1.png'],1,save_images);
     show_and_save(img2,[path 'img2.png'],1,save_images);
     
@@ -20,7 +20,7 @@ function part4(img1,img2,path,save_images)
     
     %Step 3 - Create gaussin pyramid from mask image
     [img_mask_gauss0, img_mask_gauss1, img_mask_gauss2, img_mask_gauss3, img_mask_gauss4, img_mask_gauss5, img_mask_gauss6, img_mask_gauss7, img_mask_gauss8] = ...
-        part1(mask, box_filter, save_images_override);
+        part1(mask, box_filter, 'mask', save_images_override);
     
     %Step 4 - blended(l) = mask_gaussian(l)
     img_blend_lap0 = img1_lap0 .* img_mask_gauss0 + img2_lap0 .* (1-img_mask_gauss0);
