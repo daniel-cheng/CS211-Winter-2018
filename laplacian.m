@@ -4,5 +4,5 @@ function result = laplacian(gauss1, gauss2, path, scale, save_images)
 %   and saves and shows it.
 
 % L(i) = G(i) - resize(G(i-1), 2)
-result = (gauss1 - imresize(gauss2, 2) + 1) / 2;
+result = (gauss1 - imresize(gauss2, 2, 'Method', 'bilinear') + 1) / 2;
 show_and_save(result,path,scale,save_images);

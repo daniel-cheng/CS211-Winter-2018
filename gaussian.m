@@ -5,6 +5,6 @@ function result = gaussian(image, mask, path, scale, save_images)
 
 % Apply gaussian filter and show and save
 image=conv2(image,mask,'valid');
-result = imresize(image, 0.5);
+result = imresize(image, 0.5, 'Method', 'bilinear');
 
 show_and_save(result,path,scale,save_images);
