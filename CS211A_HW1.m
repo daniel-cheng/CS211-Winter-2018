@@ -1,5 +1,5 @@
 %% CS211A Visual Computing Assignment 1
-% Written by Qiaoqian Hu, Daniel Cheng, Alan
+% Written by Qiaoqian Hu, Daniel Cheng, Allen Zhao
 % Written date: January 20th, 2018
 
 steps = [1 2 3 4];

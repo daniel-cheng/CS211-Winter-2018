@@ -3,13 +3,8 @@ function result = gaussian(image, mask, path, scale, save_images)
 %   Takes in one image image path, returns gaussian subsampled image
 %   and saves and shows it.
 
-% Apply gaussian filter and 
-image=conv2(image,mask);
-[width,height]=size(image);
-
-%Trim edges to avoid black edge artifacts and downsample
-image=image(2:width-1,2:height-1);
+% Apply gaussian filter and show and save
+image=conv2(image,mask,'valid');
 result = imresize(image, 0.5);
-[width,height]=size(result);
 
 show_and_save(result,path,scale,save_images);
