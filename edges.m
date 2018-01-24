@@ -1,4 +1,4 @@
-function result = edges(image, threshold)
+function result = edges(image,threshold,path,scale,save_image)
 %   part3 CS211A HW1.
 %   Takes in image, returns result.
 
@@ -32,7 +32,6 @@ for row=1:rows
         end
     end
 end
-imshow(flagged);
 %Step 4 - Flag all pixels above threshold variance
 %First calcualte variance by using stdfilt to get standard deviation of 
 %image at each pixel, then square it to get variance
@@ -40,3 +39,4 @@ variance_image=abs(stdfilt(flagged));
 variance_image(variance_image <= threshold) = 0;
 variance_image(variance_image > threshold) = 1;
 result=variance_image;
+show_and_save(result,path,scale,save_image);

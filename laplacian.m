@@ -1,47 +1,8 @@
-input = imread('img\CARTOON.jpg');
-filter = [1/4 1/4; 1/4 1/4];
-%filter = [-1/8 -1/8 -1/8; -1/8 1 -1/8; -1/8 -1/8 -1/8];
-figure;
-%result = imresize(result, 0.5,'Method', 'bilinear');
-result = conv2(input, filter, 'same');
-imshow(imresize(mat2gray(result), 2, 'Method', 'bilinear'));
-result = imresize(result, 0.5,'Method', 'bilinear'); 
-result = conv2(result, filter, 'same');
-figure;
-imshow(imresize(mat2gray(result), 4, 'Method', 'bilinear'));
-result = imresize(result, 0.5,'Method', 'bilinear'); 
-result = conv2(result, filter, 'same');
+function result = laplacian(gauss1, gauss2, path, scale, save_images)
+%   part2 CS211A HW1.
+%   Takes in two gauss image levels and image path, returns laplace image
+%   and saves and shows it.
 
-figure;
-imshow(imresize(mat2gray(result), 8, 'Method', 'bilinear'));
-result = imresize(result, 0.5,'Method', 'bilinear'); 
-
-result = conv2(result, filter, 'same');
-
-figure;
-imshow(imresize(mat2gray(result), 16, 'Method', 'bilinear'));
-result = imresize(result, 0.5,'Method', 'bilinear'); 
-
-result = conv2(result, filter, 'same');
-
-figure;
-imshow(imresize(mat2gray(result), 32, 'Method', 'bilinear'));
-result = imresize(result, 0.5,'Method', 'bilinear'); 
-
-result = conv2(result, filter, 'same');
-
-figure;
-imshow(imresize(mat2gray(result), 64, 'Method', 'bilinear'));
-result = imresize(result, 0.5,'Method', 'bilinear'); 
-
-result = conv2(result, filter, 'same');
-
-figure;
-imshow(imresize(mat2gray(result), 128, 'Method', 'bilinear'));
-result = imresize(result, 0.5,'Method', 'bilinear'); 
-
-result = conv2(result, filter, 'same');
-
-figure;
-imshow(imresize(mat2gray(result), 256, 'Method', 'bilinear'));
-
+% L(i) = G(i) - resize(G(i-1), 2)
+result = (gauss1 - imresize(gauss2, 2) + 1) / 2;
+show_and_save(result,path,scale,save_images);
