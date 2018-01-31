@@ -2,7 +2,7 @@
 % Written by Qiaoqian Hu, Daniel Cheng, Allen Zhao
 % Written date: January 20th, 2018
 
-steps = [1 2 3 4];
+steps = [3];
 img1 = im2double(imread('img\CARTOON.jpg'));
 img2 = im2double(imread('img\flowergray.jpg'));
 img3 = im2double(imread('img\kitty.jpg'));
@@ -54,7 +54,7 @@ end
 if ismember(3, steps(:))
     %Step 1 - Generate filter and convolve with existing Gaussian pyramid
     save_images = 1;
-    threshold_variance=0.2;
+    threshold_variance=0.03;
     [img1_edge0, img1_edge1, img1_edge2, img1_edge3, img1_edge4, img1_edge5, img1_edge6, img1_edge7, img1_edge8] = ...
         part3(img1_gauss0, img1_gauss1, img1_gauss2, img1_gauss3, img1_gauss4, ...
         img1_gauss5, img1_gauss6, img1_gauss7, img1_gauss8, threshold_variance, 'img1', save_images);
@@ -75,7 +75,7 @@ end
 %% Part4
 if ismember(4, steps(:))
     save_images = 1;
-    %part4(img1, img2, 'img/hw1/blended/pair1_', save_images);
-    %part4(img1, img3, 'img/hw1/blended/pair2_', save_images);
+    part4(img1, img2, 'img/hw1/blended/pair1_', save_images);
+    part4(img1, img3, 'img/hw1/blended/pair2_', save_images);
     part4(img4, img5, 'img/hw1/blended/pair3_', save_images);
 end
