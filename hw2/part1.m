@@ -13,34 +13,30 @@ for i = 1:512
     end
 end
 image_gray = mat2gray(image);
+show_and_save(image_gray, 'output\part1_step2.jpg', 1);
 
 %step 3
-
-
-%Reverse fft with 2 times amplitude
-
 J = fft2(image); 
 J_shift = fftshift(J);
-L = abs(J_shift);
-L_2 = L * 2;
-
-I = ifft2(L_2);
-R = mat2gray(I);
-
-show_and_save(image_gray, 'output\part1_step2.jpg', 1);
+[Amp, Phase] = imageDFT(image);
 show_and_save(Amp, 'output\part1_step3_amp.jpg', 1);
 show_and_save(Phase, 'output\part1_step3_phase.jpg', 1);
-show_and_save(R, 'output\part1_step4.jpg', 1);
 
+%step 4
+%Reverse fft with 2 times amplitude without phase information
+Amp = abs(J);
+I = ifft2(Amp * 2);
+R = mat2gray(I);
+%Reverse fft with 2 times amplitude with phase information
+Ip = ifft2(J * 2);
+Rp = mat2gray(Ip);
+show_and_save(I, 'output\part1_step4_raw.jpg', 1);
+show_and_save(R, 'output\part1_step4_normalized.jpg', 1);
+show_and_save(Ip, 'output\part1_step4_with_phase.jpg', 1);
+show_and_save(Rp, 'output\part1_step4_normalized_with_phase.jpg', 1);
 
-%Part 4
+%Part 1b
 image_cross = imread('Cross.jpg');
 [Amp_c, Phase_c] = imageDFT(image_cross);
 show_and_save(Amp_c, 'output\part1_b_amp.jpg', 1);
 show_and_save(Phase_c, 'output\part1_b_phase.jpg', 1);
-
-
-
-
-
-%imshow(image_gray)

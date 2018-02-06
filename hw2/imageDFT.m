@@ -7,7 +7,7 @@ function [A,T] = imageDFT(source)
 J = fft2(source); 
 J_shift = fftshift(J);
 P = angle(J_shift);
-L = abs(J_shift+1);
+L = abs(J_shift + 1) / 2;
 A = mat2gray(log2(L));
 T = mat2gray(P);
 % 
