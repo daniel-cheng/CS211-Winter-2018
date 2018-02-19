@@ -1,10 +1,12 @@
-function [C_matrix, u, v] = calculate_camera_matrix(image, p)
-    disp(p)
-    figure(1);
-    imshow(image);
-    [u, v] = getpts;
-    disp(u)
-    disp(v)
+%function [C_matrix, u, v] = calculate_camera_matrix(image, p)
+function [C_matrix, u, v] = calculate_camera_matrix(image, u, v, p)
+    % I ran this once to get all the corresponding u/v points on the image,
+    % so we don't have to run this again everytime
+    %figure(1);
+    %imshow(image);
+    %[u, v] = getpts;
+    %disp(u)
+    %disp(v)
     syms r1x r1y r1z r1w r2x r2y r2z r2w r3x r3y r3z r3w 
     eqn1 = u(1) * (r3x * p{1}(1) + r3y * p{1}(2) + r3z * p{1}(3) + r3w * p{1}(4)) - (r1x * p{1}(1) + r1y * p{1}(2) + r1z * p{1}(3) + r1w * p{1}(4)) == 0;
     eqn2 = v(1) * (r3x * p{1}(1) + r3y * p{1}(2) + r3z * p{1}(3) + r3w * p{1}(4)) - (r2x * p{1}(1) + r2y * p{1}(2) + r2z * p{1}(3) + r2w * p{1}(4)) == 0;

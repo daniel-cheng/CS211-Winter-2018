@@ -15,7 +15,7 @@ end
 
 %% Part2 - Calculate camera calibration matrix
 if ismember(2, steps(:))
-    [C_matrices, u, v] = part2();
+    [C_matrices, u, v] = part2(u, v);
 end
 
 %% Part3 - Calculate fundamental camera matrices from matching points of each image pair.
