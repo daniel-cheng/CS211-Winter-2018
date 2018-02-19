@@ -2,7 +2,7 @@
 % Written by Qiaoqian Hu, Daniel Cheng, Allen Zhao
 % Written date: Feburary 18th, 2018
 
-steps = [1 3];
+steps = [2];
 
 %% Part1 - Perform SIFT on image pairs and return matching points.
 if ismember(1, steps(:))
@@ -15,7 +15,7 @@ end
 
 %% Part2 - Calculate camera calibration matrix
 if ismember(2, steps(:))
-    C_matrix = part2();
+    [C_matrices, u, v] = part2();
 end
 
 %% Part3 - Calculate fundamental camera matrices from matching points of each image pair.
