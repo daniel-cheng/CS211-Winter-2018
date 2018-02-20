@@ -16,6 +16,8 @@ end
 %% Part2 - Calculate camera calibration matrix
 if ismember(2, steps(:))
     [C_matrices, u, v] = part2(u, v);
+    %uncomment these if you want to regenerate the u/v image coordinates
+    %[C_matrices, u, v] = part2();
 end
 
 %% Part3 - Calculate fundamental camera matrices from matching points of each image pair.
