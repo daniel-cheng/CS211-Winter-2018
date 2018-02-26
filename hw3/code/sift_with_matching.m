@@ -1,14 +1,14 @@
-function [matches, scores, points] = sift_with_matching(Ia, Ib, score_threshold, save_image, image_path)
+function [matches, scores, points] = sift_with_matching(Ia, Ib, Ia_mask, Ib_mask, score_threshold, save_image, image_path)
     % VL_DEMO_SIFT_MATCH  Demo: SIFT: basic matching
     % --------------------------------------------------------------------
     %                                           Extract features and match
     % --------------------------------------------------------------------
     % Execute SIFT
-    [fa,da] = vl_sift(im2single(rgb2gray(Ia))) ;
-    [fb,db] = vl_sift(im2single(rgb2gray(Ib))) ;
+    [fa,da] = vl_sift(im2single(rgb2gray(Ia) .* uint8(mat2gray(rgb2gray(Ia_mask)))));
+    [fb,db] = vl_sift(im2single(rgb2gray(Ib) .* uint8(mat2gray(rgb2gray(Ib_mask)))));
 
     % Matching features
-    [matches, scores] = vl_ubcmatch(da,db) ;
+    [matches, scores] = vl_ubcmatch(da,db,2.25) ;
 
     [drop, perm] = sort(scores, 'descend') ;
     matches = matches(:, perm) ;
@@ -24,10 +24,10 @@ function [matches, scores, points] = sift_with_matching(Ia, Ib, score_threshold,
     imagesc(cat(2, Ia, Ib)) ;
 
     %Stack images vertically
-    xa = fa(1,matches(1,:)) ;
-    xb = fb(1,matches(2,:)) + size(Ia,2);
-    ya = fa(2,matches(1,:)) ;
-    yb = fb(2,matches(2,:)) ;
+    xa = fa(1,matches(1,1:10)) ;
+    xb = fb(1,matches(2,1:10)) + size(Ia,2);
+    ya = fa(2,matches(1,1:10)) ;
+    yb = fb(2,matches(2,1:10)) ;
     
     points = {[xa ; xb ; ones(1, size(xa, 2))], [ya ; yb ; ones(1, size(ya, 2))]} ;
 
@@ -35,9 +35,9 @@ function [matches, scores, points] = sift_with_matching(Ia, Ib, score_threshold,
     h = line([xa ; xb], [ya ; yb]) ;
     set(h,'linewidth', 1, 'color', 'r') ;
     
-    vl_plotframe(fa(:,matches(1,:))) ;
+    vl_plotframe(fa(:,matches(1,1:10))) ;
     fb(1,:) = fb(1,:) + size(Ia,2) ;
-    vl_plotframe(fb(:,matches(2,:))) ;
+    vl_plotframe(fb(:,matches(2,1:10))) ;
     axis image off ;
     
     if save_image

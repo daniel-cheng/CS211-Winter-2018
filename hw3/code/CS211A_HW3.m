@@ -8,7 +8,7 @@ steps = [2];
 if ismember(1, steps(:))
     % Each image set contains 3-6 images from the data folder. 
     % The more images, the more accuracte the camera matrix, but the more time it takes to calculate.
-    images_per_set = 3; 
+    images_per_set = 4; 
     [images_set_1, sift_matches_1, sift_scores_1, points_1, images_set_2, sift_matches_2, sift_scores_2, points_2]...
         = part1(images_per_set);
 end
