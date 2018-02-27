@@ -10,6 +10,7 @@ function [matches, scores, points] = sift_with_matching(Ia, Ib, Ia_mask, Ib_mask
     % Matching features
     [matches, scores] = vl_ubcmatch(da,db,2.0) ;
 
+
     [drop, perm] = sort(scores, 'descend') ;
     matches = matches(:, perm) ;
     scores  = scores(perm) ;
@@ -18,16 +19,17 @@ function [matches, scores, points] = sift_with_matching(Ia, Ib, Ia_mask, Ib_mask
     good_indices = (scores / max(scores)) > score_threshold;
     matches = matches(:, good_indices);
     scores = scores(good_indices);
-
+    disp(['number of matched points: ' num2str(size(scores,2))])
+    
     %Show matches
     figure(2) ; clf ;
     imagesc(cat(2, Ia, Ib)) ;
 
     %Stack images vertically
-    xa = fa(1,matches(1,1:10)) ;
-    xb = fb(1,matches(2,1:10)) + size(Ia,2);
-    ya = fa(2,matches(1,1:10)) ;
-    yb = fb(2,matches(2,1:10)) ;
+    xa = fa(1,matches(1,:)) ;
+    xb = fb(1,matches(2,:)) + size(Ia,2);
+    ya = fa(2,matches(1,:)) ;
+    yb = fb(2,matches(2,:)) ;
     
     points = {[xa ; xb ; ones(1, size(xa, 2))], [ya ; yb ; ones(1, size(ya, 2))]} ;
 
@@ -35,9 +37,9 @@ function [matches, scores, points] = sift_with_matching(Ia, Ib, Ia_mask, Ib_mask
     h = line([xa ; xb], [ya ; yb]) ;
     set(h,'linewidth', 1, 'color', 'r') ;
     
-    vl_plotframe(fa(:,matches(1,1:10))) ;
+    vl_plotframe(fa(:,matches(1,:))) ;
     fb(1,:) = fb(1,:) + size(Ia,2) ;
-    vl_plotframe(fb(:,matches(2,1:10))) ;
+    vl_plotframe(fb(:,matches(2,:))) ;
     axis image off ;
     
     if save_image
