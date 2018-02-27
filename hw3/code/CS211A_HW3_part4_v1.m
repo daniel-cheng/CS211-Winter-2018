@@ -1,4 +1,4 @@
-image_files = dir('C:/Users/Qiaoqian/Desktop/2018 Winter/CS 211A visual computing/hw3/211HW3/211HW3/data/images/*.jpg');      
+image_files = dir('../data/images/*.jpg');      
 number_of_files = length(image_files);    % Number of files found
 images = cell(number_of_files, 1);
 limiter = number_of_files;
@@ -14,7 +14,7 @@ points{7} = [32 80 67 1];
 points{8} = [0 80 67 1];
 for i = 1:limiter
     filename = image_files(i).name;
-    images{i} = imread(['C:/Users/Qiaoqian/Desktop/2018 Winter/CS 211A visual computing/hw3/211HW3/211HW3/data/images/' filename]);
+    images{i} = imread(['../data/images/' filename]);
     [C_matrices{i}, u{i}, v{i}] = calculate_camera_matrix(images{i}, u{i}, v{i}, points);
     %disp(['Camera calibraration matrix for image ' filename 'i = ' num2str(i) ': ']);
     %disp(C_matrices{i});

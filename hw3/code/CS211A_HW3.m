@@ -2,7 +2,7 @@
 % Written by Qiaoqian Hu, Daniel Cheng, Allen Zhao
 % Written date: Feburary 18th, 2018
 
-steps = [1 3];
+steps = [4];
 
 %% Part1 - Perform SIFT on image pairs and return matching points.
 if ismember(1, steps(:))
@@ -34,5 +34,8 @@ end
 
 %% Part4
 if ismember(4, steps(:))
-    part4();
+    %part4();
+    
+    plot_cameras(C_matrices, data_new{1});
+    plot_cameras(C_matrices, data_new{2});
 end
