@@ -1,4 +1,4 @@
-function [matches, scores, points] = sift_with_matching(Ia, Ib, Ia_mask, Ib_mask, score_threshold, save_image, image_path)
+function [features_1, features_2, matches, scores, points] = sift_with_matching(Ia, Ib, Ia_mask, Ib_mask, score_threshold, save_image, image_path)
     % VL_DEMO_SIFT_MATCH  Demo: SIFT: basic matching
     % --------------------------------------------------------------------
     %                                           Extract features and match
@@ -25,12 +25,15 @@ function [matches, scores, points] = sift_with_matching(Ia, Ib, Ia_mask, Ib_mask
     figure(2) ; clf ;
     imagesc(cat(2, Ia, Ib)) ;
 
-    %Stack images vertically
+    %Stack images horizontally
     xa = fa(1,matches(1,:)) ;
     xb = fb(1,matches(2,:)) + size(Ia,2);
     ya = fa(2,matches(1,:)) ;
     yb = fb(2,matches(2,:)) ;
     
+    %Save results
+    features_1 = fa;
+    features_2 = fb;
     points = {[xa ; xb ; ones(1, size(xa, 2))], [ya ; yb ; ones(1, size(ya, 2))]} ;
 
     hold on ;

@@ -1,8 +1,10 @@
-function [images_set, sift_matches, sift_scores, sift_points] = match_set(images, images_mask, set_start, images_per_set)
+function [images_set, sift_features_1, sift_features_2, sift_matches, sift_scores, sift_points] = match_set(images, images_mask, set_start, images_per_set)
     %Sort the matches based on their scores and remove all the matches with very low scores.
     score_threshold = 0.125;
     set_length = images_per_set;
     pairs = nchoosek(images_per_set, 2);
+    sift_features_1 = cell(pairs, 1);
+    sift_features_2 = cell(pairs, 1);
     sift_matches = cell(pairs, 1);
     sift_scores = cell(pairs, 1);
     sift_points = cell(pairs, 1);
@@ -16,7 +18,7 @@ function [images_set, sift_matches, sift_scores, sift_points] = match_set(images
         for j = i:set_end
             if i ~= j
                 disp([num2str(pair) ' out of '  num2str(pairs)]);
-                [sift_matches{pair}, sift_scores{pair}, sift_points{pair}] = sift_with_matching(images{i}, images{j}, images_mask{i}, images_mask{j}, score_threshold, save_images, [image_path 'match' num2str(i) '-' num2str(j) '.png']);        
+                [sift_features_1{pair}, sift_features_2{pair}, sift_matches{pair}, sift_scores{pair}, sift_points{pair}] = sift_with_matching(images{i}, images{j}, images_mask{i}, images_mask{j}, score_threshold, save_images, [image_path 'match' num2str(i) '-' num2str(j) '.png']);        
                 pair = pair + 1;
             end
         end
