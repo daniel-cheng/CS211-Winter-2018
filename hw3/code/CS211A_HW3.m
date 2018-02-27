@@ -24,8 +24,8 @@ end
 if ismember(3, steps(:))
     % To get the x/y coordinates of top matches in first image pair in first image set, do the following:
     image_a1_x_coords = sift_features_a_1{1}(1,sift_matches_1{1}(1,:))
-    image_a1_y_coords = sift_features_a_1{1}(1,sift_matches_1{1}(2,:))
-    image_b1_x_coords = sift_features_b_1{1}(2,sift_matches_1{1}(1,:))
+    image_a1_y_coords = sift_features_a_1{1}(2,sift_matches_1{1}(1,:))
+    image_b1_x_coords = sift_features_b_1{1}(1,sift_matches_1{1}(2,:))
     image_b1_y_coords = sift_features_b_1{1}(2,sift_matches_1{1}(2,:))
     
     [F_matrices_1, epipoles_1_a, epipoles_1_b, F_matrices_2, epipoles_2_a, epipoles_2_b]...
