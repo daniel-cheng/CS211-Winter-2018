@@ -8,7 +8,7 @@ function [matches, scores, points] = sift_with_matching(Ia, Ib, Ia_mask, Ib_mask
     [fb,db] = vl_sift(im2single(rgb2gray(Ib) .* uint8(mat2gray(rgb2gray(Ib_mask)))));
 
     % Matching features
-    [matches, scores] = vl_ubcmatch(da,db,2.0) ;
+    [matches, scores] = vl_ubcmatch(da,db,1.9) ;
 
 
     [drop, perm] = sort(scores, 'descend') ;
