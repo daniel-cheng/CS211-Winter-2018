@@ -1,0 +1,10 @@
+//Fragment Shader
+#version 330
+layout(location = 0) out vec4 outputF;
+//from vertex shader
+in float light;
+ 
+void main()
+{
+	outputF = vec4(light,light,light,1);
+}
