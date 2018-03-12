@@ -1,0 +1,68 @@
+#version 330
+uniform mat4 viewMatrix, projMatrix;
+uniform mat3 normalMatrix;
+
+layout (location = 0) in vec4 position;
+in vec3 normal;
+in vec3 color;
+
+layout(location = 1) in vec2 vertexUV;
+ 
+out vec3 Color;
+out vec3 Normal;
+out vec4 Position;
+
+
+// UV is the texture coordinate of this vertex
+out vec2 UV;
+
+uniform vec4 Ambient;
+uniform vec3 LightColor;
+uniform vec3 LightPosition;
+uniform float Shininess;
+uniform float Strength;
+uniform vec3 EyeDirection;
+
+uniform float material_kd;//?
+uniform float material_ks;//?
+ 
+out float light;
+
+
+
+void main()
+{
+    Color = color;
+	Normal = normalize(normalMatrix * normal);
+	UV = vertexUV;
+
+	vec3 world_position = vec3(position);//Casting a higher-dimensional vector to a lower-dimensional vector
+ 
+	vec3 L = normalize(light_position - world_position);//light direction
+	vec3 V = normalize(EyeDirection); //view direction
+	vec3 H = normalize(L + V );//Halfway
+ 
+	float LdotN = max(0, dot(L,Normal));
+ 
+	//consider diffuse light color white(1,1,1)
+	//all color channels have the same float value
+	float diffuse = material_kd * LdotN;
+ 
+	float specular = 0;
+
+	if(LdotN > 0.0)
+	{
+	 specular = material_ks * pow(max(0, dot(H, Normal)), Shininess);
+	 }
+ 
+	//pass light to fragment shader
+	//Final light(with white(1,1,1)) would be:
+	light = ke + material_ka + diffuse + specular;
+ 
+	//final vertex position
+	// You need to multiply the model view (viewMatrix) and projection (projMatrix) matrices with the position in correct order
+	// After this step you should be able too see a blue cube in the middle of the window
+    gl_Position = projMatrix *  viewMatrix * position;  
+
+}
+
