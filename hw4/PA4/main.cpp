@@ -442,7 +442,26 @@ void setupBuffers() {
     glEnableVertexAttribArray(normalLoc);
     glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
 
+	glBindVertexArray(vert[1]);
+	// generate 2 buffers for vert and color
+	glGenBuffers(4, buffers);
+	// bind buffer for vertices and copy data into buffer
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(vertexLoc);
+	glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, 0, 0, 0);
 
+	// bind buffer for colors and copy data into buffer
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors1), colors1, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(colorLoc);
+	glVertexAttribPointer(colorLoc, 4, GL_FLOAT, 0, 0, 0);
+
+	// bind buffer for normals and copy data into buffer
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(normals1), normals1, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(normalLoc);
+	glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
 }
  
 void setUniforms() {
@@ -479,6 +498,7 @@ void renderScene(void) {
     glutSetWindowTitle(s);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  
+	//Drawing first cube
 	//placeCam(10,2,10,0,2,-5);
 	placeCam(viewPosition[0], viewPosition[1], viewPosition[2], 0, 0, -5);
 	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, angle));
@@ -490,6 +510,7 @@ void renderScene(void) {
     glBindVertexArray(vert[0]);
 	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices1));
 
+	//Drawing second cube, relative to first one
 	float T[16];	
 	setScale(T,0.5,0.5,0.5);
 	multiplyMatrix(viewMatrix, T);
