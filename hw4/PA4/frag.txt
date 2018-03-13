@@ -1,4 +1,5 @@
 #version 330
+
 uniform mat4 viewMatrix, projMatrix;
 
 uniform vec4 Ambient;

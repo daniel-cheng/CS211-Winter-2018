@@ -1,10 +1,25 @@
-//Fragment Shader
 #version 330
-layout(location = 0) out vec4 outputF;
-//from vertex shader
-in float light;
+
+uniform mat4 viewMatrix, projMatrix;
+
+uniform vec4 Ambient;
+uniform vec3 LightColor;
+uniform vec3 LightPosition;
+uniform float Shininess;
+uniform float Strength;
+uniform vec3 EyeDirection;
+
+uniform sampler2D myTextureSampler;
+
+in vec3 Color;
+in vec3 Normal;
+in vec4 Position;
+
+in vec2 UV;
+
+out vec4 outputF;
  
 void main()
 {
-	outputF = vec4(light,light,light,1);
+	outputF = vec4(Color,1);
 }

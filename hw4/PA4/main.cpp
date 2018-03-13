@@ -170,8 +170,8 @@ float colors1[] = { 0.0f, 0.0f, 1.0f, 0.3f,
 
  
 // shader names
-char *vertexFileName = "vertex.txt";
-char *fragmentFileName = "frag.txt";
+char *vertexFileName = "vertex_gouraud.txt";
+char *fragmentFileName = "frag_gouraud.txt";
  
 // program and shader Id
 GLuint p,v,f;
@@ -182,7 +182,8 @@ GLuint vertexLoc, colorLoc, normalLoc;
 // uniform var locations
 GLuint projMatrixLoc, viewMatrixLoc, normalMatrixLoc;
 
-GLuint ambientColorLoc,lightColorLoc, lightPositionLoc, ShininessLoc, StrengthLoc, EyeDirectionLoc;
+GLuint ambientColorLoc, lightColorLoc, lightSpecularColorLoc, lightPositionLoc, ShininessLoc, StrengthLoc, EyeDirectionLoc;
+GLuint materialEmissiveLoc, materialAmbientLoc, materialDiffuseLoc, materialSpecularLoc;
 
 GLuint textureLoc,samplerLoc;
  
@@ -196,10 +197,17 @@ float normalMatrix[9];
 
 float ambientColor[] = {0.2f, 0.2f, 0.2f, 1.0f};
 float lightColor[] = {0.9f, 0.8f, 0.9f};
+float lightSpecularColor[] = {1.0f, 1.0f, 1.0f};
 float lightPosition[] = { 4.0f, 4.0f, 4.0f};
 float Shininess = 20.0;
 float Strength = 10.0;
 float EyeDirection[] = {0 , 0 , -5};
+
+float materialEmissive[] = { 0.0f, 0.0f, 0.0f };
+float materialAmbient[] = { 0.0f, 0.0f, 0.0f };
+float materialDiffuse[] = { 0.5f, 0.5f, 0.9f };
+float materialSpecular[] = { 0.5f, 0.5f, 0.5f };
+
 float mouseSensitivity = 0.1f;
 
 
@@ -446,11 +454,16 @@ void setUniforms() {
 	glUniformMatrix3fv(normalMatrixLoc, 1, false, normalMatrix);
 	glUniform4fv(ambientColorLoc, 1, ambientColor);
 	glUniform3fv(lightColorLoc, 1, lightColor);
+	glUniform3fv(lightSpecularColorLoc, 1, lightSpecularColor);
 	glUniform3fv(lightPositionLoc, 1, lightPosition);
 	glUniform1f(ShininessLoc,Shininess);
 	glUniform1f(StrengthLoc, Strength);
 	glUniform3fv(EyeDirectionLoc,1,EyeDirection);
 
+	glUniform3fv(materialEmissiveLoc, 1, materialEmissive);
+	glUniform3fv(materialAmbientLoc, 1, materialAmbient);
+	glUniform3fv(materialDiffuseLoc, 1, materialDiffuse);
+	glUniform3fv(materialSpecularLoc, 1, materialSpecular);
 }
  
 void renderScene(void) {
@@ -552,6 +565,7 @@ GLuint initShaders() {
     glBindFragDataLocation(p, 0, "outputF");
     glLinkProgram(p);
     printProgramInfoLog(p);
+
     vertexLoc = glGetAttribLocation(p,"position");
     colorLoc = glGetAttribLocation(p, "color"); 
 	normalLoc = glGetAttribLocation(p, "normal");
@@ -560,10 +574,16 @@ GLuint initShaders() {
 	normalMatrixLoc = glGetUniformLocation(p, "normalMatrix");
 	ambientColorLoc = glGetUniformLocation(p,"Ambient");
 	lightColorLoc = glGetUniformLocation(p,"LightColor");
+	lightSpecularColorLoc = glGetUniformLocation(p, "LightSpecularColor");
 	lightPositionLoc = glGetUniformLocation(p,"LightPosition");
 	ShininessLoc = glGetUniformLocation(p,"Shininess");
 	StrengthLoc = glGetUniformLocation(p,"Strength");
 	EyeDirectionLoc = glGetUniformLocation(p,"EyeDirection");
+
+	materialEmissiveLoc = glGetUniformLocation(p, "material_ke");
+	materialAmbientLoc = glGetUniformLocation(p, "material_ka");
+	materialDiffuseLoc = glGetUniformLocation(p, "material_kd");
+	materialSpecularLoc = glGetUniformLocation(p, "material_ks");
  
     return(p);
 }
