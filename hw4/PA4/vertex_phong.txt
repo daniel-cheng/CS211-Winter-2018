@@ -10,6 +10,7 @@ in vec3 color;
 layout(location = 1) in vec2 vertexUV;
 out vec3 Normal;
 out vec3 world_position;
+out vec3 obj_color;
 
 // UV is the texture coordinate of this vertex
 out vec2 UV;
@@ -18,6 +19,7 @@ void main()
 {
 	Normal = normalize(normalMatrix * normal);
 	UV = vertexUV;
+	obj_color=color;
 
 	world_position = position.xyz;					//Casting a higher-dimensional vector to a lower-dimensional vector
  
