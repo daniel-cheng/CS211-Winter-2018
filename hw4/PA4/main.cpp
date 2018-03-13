@@ -170,8 +170,8 @@ float colors1[] = { 0.0f, 0.0f, 1.0f, 0.3f,
 
  
 // shader names
-char *vertexFileName = "vertex_gouraud.txt";
-char *fragmentFileName = "frag_gouraud.txt";
+char *vertexFileName = "vertex_phong.txt";
+char *fragmentFileName = "frag_phong.txt";
  
 // program and shader Id
 GLuint p,v,f;
@@ -189,6 +189,9 @@ GLuint textureLoc,samplerLoc;
  
 // vert array obj Id
 GLuint vert[3];
+
+//Rotating angle of spinner
+GLfloat xRotated, yRotated, zRotated;
  
 // storage for matrices
 float projMatrix[16];
@@ -415,32 +418,32 @@ void changeSize(int w, int h) {
 }
  
 void setupBuffers() {
- 
-    GLuint buffers[4];
- 
-    glGenVertexArrays(1, vert);
 
-    // first triangle
-    glBindVertexArray(vert[0]);
-    // generate 2 buffers for vert and color
-    glGenBuffers(4, buffers);
-    // bind buffer for vertices and copy data into buffer
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(vertexLoc);
-    glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, 0, 0, 0);
- 
-    // bind buffer for colors and copy data into buffer
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(colors1), colors1, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(colorLoc);
-    glVertexAttribPointer(colorLoc, 4, GL_FLOAT, 0, 0, 0);
+	GLuint buffers[4];
+
+	glGenVertexArrays(1, vert);
+
+	// first triangle
+	glBindVertexArray(vert[0]);
+	// generate 2 buffers for vert and color
+	glGenBuffers(4, buffers);
+	// bind buffer for vertices and copy data into buffer
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(vertexLoc);
+	glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, 0, 0, 0);
+
+	// bind buffer for colors and copy data into buffer
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors1), colors1, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(colorLoc);
+	glVertexAttribPointer(colorLoc, 4, GL_FLOAT, 0, 0, 0);
 
 	// bind buffer for normals and copy data into buffer
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(normals1), normals1, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(normalLoc);
-    glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(normals1), normals1, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(normalLoc);
+	glVertexAttribPointer(normalLoc, 3, GL_FLOAT, 0, 0, 0);
 
 	glBindVertexArray(vert[1]);
 	// generate 2 buffers for vert and color
@@ -488,41 +491,50 @@ void setUniforms() {
 void renderScene(void) {
 
 	frame++;
-	time=glutGet(GLUT_ELAPSED_TIME);
+	time = glutGet(GLUT_ELAPSED_TIME);
 	if (time - timebase > 1000) {
 		sprintf(s, "FPS:%4.2f",
 			frame*1000.0 / (time - timebase));
 		timebase = time;
 		frame = 0;
 	}
-    glutSetWindowTitle(s);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
- 
+	glutSetWindowTitle(s);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	//Drawing first cube
 	//placeCam(10,2,10,0,2,-5);
 	placeCam(viewPosition[0], viewPosition[1], viewPosition[2], 0, 0, -5);
 	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, angle));
 	multiplyMatrix(viewMatrix, rotationMatrix(1.0f, 0.0f, 0.0f, angle2));
 
-    glUseProgram(p);
-    setUniforms();
+	float T[16];
+	setIdentMatrix(T, 4);
 
-    glBindVertexArray(vert[0]);
+	glUseProgram(p);
+
+	multiplyMatrix(T, rotationMatrix(0.0f, 1.0f, 0.0f, yRotated));
+	multiplyMatrix(viewMatrix, T);
+
+	setUniforms();
+
+	glBindVertexArray(vert[0]);
 	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices1));
 
 	//Drawing second cube, relative to first one
-	float T[16];	
-	setScale(T,0.5,0.5,0.5);
+	setScale(T, 0.5, 0.5, 0.5);
 	multiplyMatrix(viewMatrix, T);
-	setTransMatrix(T,4,0,0);
+	setTransMatrix(T, 4, 0, 0);
+	multiplyMatrix(viewMatrix, T);
+	multiplyMatrix(T, rotationMatrix(0.0f, 1.0f, 0.0f, -yRotated));
 	multiplyMatrix(viewMatrix, T);
 
-    setUniforms();
 
-    glBindVertexArray(vert[1]);
-    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices1));
-  
-    glutSwapBuffers();
+	setUniforms();
+
+	glBindVertexArray(vert[1]);
+	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices1));
+
+	glutSwapBuffers();
 }
  
 
@@ -685,7 +697,13 @@ void init(){
 	viewPosition[2] = 11;
 	
 }
- 
+
+void spinner() {
+	//yRotated += 0.01;
+	yRotated += 0.01;
+	renderScene();
+}
+
 int main(int argc, char **argv) 
 {
 	// sets up glut
@@ -697,8 +715,9 @@ int main(int argc, char **argv)
     glutSetWindowTitle(s);
 	// call back functions
     glutDisplayFunc(renderScene);
-    glutIdleFunc(renderScene);
     glutReshapeFunc(changeSize);
+	glutIdleFunc(spinner);
+
 
 	glutMouseFunc(mouseButton);
 	glutMotionFunc(mouseMove);
