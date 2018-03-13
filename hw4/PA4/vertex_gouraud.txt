@@ -45,14 +45,13 @@ void main()
 	vec3 specular = vec3(0.0, 0.0, 0.0);
 	if(LdotN > 0.0)
 	{
-		specular = Strength * pow(max(0, dot(H, Normal)), Shininess) * LightSpecularColor * material_ks;
+		specular = pow(max(0, dot(H, Normal)), Shininess) * LightSpecularColor * material_ks;
 	}
  
 	//Final color to fragment shader
-	Color = material_ke + Ambient.xyz * material_ka + diffuse + specular;
+	Color = (material_ke + Ambient.xyz * material_ka + diffuse + specular)*color;
  
 	//Final vertex position
     gl_Position = projMatrix *  viewMatrix * position;  
 
 }
-
