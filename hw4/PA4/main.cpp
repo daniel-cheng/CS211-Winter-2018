@@ -524,10 +524,11 @@ void renderScene(void) {
 	placeCam(viewPosition[0], viewPosition[1], viewPosition[2], 0, 0, -5);
 	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, angle));
 	multiplyMatrix(viewMatrix, rotationMatrix(1.0f, 0.0f, 0.0f, angle2));
+	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, -yRotated));
 	setIdentMatrix(T, 4);
 	setScale(T, 0.5, 0.5, 0.5);
 	multiplyMatrix(viewMatrix, T);
-	setTransMatrix(T, 4, 0, 0);
+	setTransMatrix(T, 8, 0, 0);
 	multiplyMatrix(viewMatrix, T);
 	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, -yRotated));
 
