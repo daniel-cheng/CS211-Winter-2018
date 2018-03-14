@@ -36,7 +36,7 @@ void main()
 
 	vec3 world_position = position.xyz;					//Casting a higher-dimensional vector to a lower-dimensional vector
  
-	vec3 L = normalize(LightPosition - world_position);	//light direction
+	vec3 L = normalize(LightPosition);	//light direction
 	vec3 V = normalize(EyeDirection);					//view direction
 	vec3 H = normalize(L + V);							//Halfway
  
@@ -49,7 +49,7 @@ void main()
 	}
  
 	//Final color to fragment shader
-	Color = (material_ke + Ambient.xyz * material_ka + diffuse + specular)*color;
+	Color = (material_ke + Ambient.xyz * material_ka + diffuse + specular) * color;
  
 	//Final vertex position
     gl_Position = projMatrix *  viewMatrix * position;  

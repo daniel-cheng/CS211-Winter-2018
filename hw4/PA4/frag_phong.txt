@@ -16,7 +16,7 @@ uniform vec3 material_kd; //Material diffuse color (default [0, 0, 1])
 uniform vec3 material_ks; //Material specular color (default [0, 0, 0])
  
  
-in vec3 world_position;
+in vec3 camera_position;
 in vec3 Normal;
 in vec2 UV;
 in vec3 obj_color;
@@ -24,8 +24,7 @@ in vec3 obj_color;
  
 void main(){
  
- 
-	vec3 L = normalize(LightPosition - world_position);	//light direction
+	vec3 L = normalize(LightPosition);	//light direction
 	vec3 V = normalize(EyeDirection);					//view direction
 	vec3 H = normalize(L + V);							//Halfway
  
@@ -38,7 +37,7 @@ void main(){
 	}
  
 	//Final color to fragment shader
-	vec3 Color = (material_ke + Ambient.xyz * material_ka + diffuse + specular)*obj_color;
+	vec3 Color = (material_ke + Ambient.xyz * material_ka + diffuse + specular) * obj_color;
  
 	outputF = vec4(Color,1);
 }

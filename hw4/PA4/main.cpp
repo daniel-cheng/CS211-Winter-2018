@@ -76,9 +76,6 @@ float vertices1[] = {       -1.0f,-1.0f,-1.0f, // triangle 1 : begin
 							1.0f,-1.0f, 1.0f
 						};
 
-
-
-
 float normals1[] = {     -1.0f,0.0f,0.0f, // triangle 1 : begin
 						-1.0f,0.0f,0.0f,
 						-1.0f,0.0f,0.0f, // triangle 1 : end
@@ -128,8 +125,6 @@ float normals1[] = {     -1.0f,0.0f,0.0f, // triangle 1 : begin
 						0.0f,0.0f, 1.0f
 						};
 
-
- 
 float colors1[] = { 0.0f, 0.0f, 1.0f, 0.3f,
             0.0f, 0.0f, 1.0f, 0.3f,
             0.0f,0.0f, 1.0f, 0.3f,
@@ -196,12 +191,13 @@ GLfloat xRotated, yRotated, zRotated;
 // storage for matrices
 float projMatrix[16];
 float viewMatrix[16];
+float modelMatrix[16];
 float normalMatrix[9];
 
 float ambientColor[] = {0.2f, 0.2f, 0.2f, 1.0f};
 float lightColor[] = {0.9f, 0.8f, 0.9f};
 float lightSpecularColor[] = {1.0f, 1.0f, 1.0f};
-float lightPosition[] = { 4.0f, 4.0f, 4.0f};
+float lightPosition[] = { 8.0f, 8.0f, 8.0f};
 float Shininess = 20.0;
 float Strength = 10.0;
 float EyeDirection[] = {0 , 0 , -5};
@@ -283,7 +279,21 @@ void setIdentMatrix( float *mat, int size)
 		}
 	}
 }
- 
+
+// sets the normal matrix
+void setNormalMatrix()
+{
+	normalMatrix[0] = viewMatrix[0];
+	normalMatrix[1] = viewMatrix[1];
+	normalMatrix[2] = viewMatrix[2];
+	normalMatrix[3] = viewMatrix[4];
+	normalMatrix[4] = viewMatrix[5];
+	normalMatrix[5] = viewMatrix[6];
+	normalMatrix[6] = viewMatrix[8];
+	normalMatrix[7] = viewMatrix[9];
+	normalMatrix[8] = viewMatrix[10];
+}
+
 // View Matrix
 // just like glulookat
 void placeCam(float posX, float posY, float posZ, float lookX, float lookY, float lookZ) 
@@ -324,15 +334,7 @@ void placeCam(float posX, float posY, float posZ, float lookX, float lookY, floa
     viewMatrix[14] =  0.0f;
     viewMatrix[15] = 1.0f;
 
-	normalMatrix[0] = viewMatrix[0];
-	normalMatrix[1] = viewMatrix[1];
-	normalMatrix[2] = viewMatrix[2];
-	normalMatrix[3] = viewMatrix[4];
-	normalMatrix[4] = viewMatrix[5];
-	normalMatrix[5] = viewMatrix[6];
-	normalMatrix[6] = viewMatrix[8];
-	normalMatrix[7] = viewMatrix[9];
-	normalMatrix[8] = viewMatrix[10];
+	setNormalMatrix();
 
     setTransMatrix(aux, -posX, -posY, -posZ);
     multiplyMatrix(viewMatrix, aux);
@@ -500,35 +502,36 @@ void renderScene(void) {
 	}
 	glutSetWindowTitle(s);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	//Drawing first cube
-	//placeCam(10,2,10,0,2,-5);
-	placeCam(viewPosition[0], viewPosition[1], viewPosition[2], 0, 0, -5);
-	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, angle));
-	multiplyMatrix(viewMatrix, rotationMatrix(1.0f, 0.0f, 0.0f, angle2));
+	glUseProgram(p);
 
 	float T[16];
 	setIdentMatrix(T, 4);
+	setIdentMatrix(modelMatrix, 4);
 
-	glUseProgram(p);
+	//Drawing first cube
+	placeCam(viewPosition[0], viewPosition[1], viewPosition[2], 0, 0, -5);
+	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, angle));
+	multiplyMatrix(viewMatrix, rotationMatrix(1.0f, 0.0f, 0.0f, angle2));
+	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, yRotated));
 
-	multiplyMatrix(T, rotationMatrix(0.0f, 1.0f, 0.0f, yRotated));
-	multiplyMatrix(viewMatrix, T);
-
+	setNormalMatrix();
 	setUniforms();
 
 	glBindVertexArray(vert[0]);
 	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices1));
 
 	//Drawing second cube, relative to first one
+	placeCam(viewPosition[0], viewPosition[1], viewPosition[2], 0, 0, -5);
+	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, angle));
+	multiplyMatrix(viewMatrix, rotationMatrix(1.0f, 0.0f, 0.0f, angle2));
+	setIdentMatrix(T, 4);
 	setScale(T, 0.5, 0.5, 0.5);
 	multiplyMatrix(viewMatrix, T);
 	setTransMatrix(T, 4, 0, 0);
 	multiplyMatrix(viewMatrix, T);
-	multiplyMatrix(T, rotationMatrix(0.0f, 1.0f, 0.0f, -yRotated));
-	multiplyMatrix(viewMatrix, T);
+	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, -yRotated));
 
-
+	setNormalMatrix();
 	setUniforms();
 
 	glBindVertexArray(vert[1]);
@@ -699,7 +702,6 @@ void init(){
 }
 
 void spinner() {
-	//yRotated += 0.01;
 	yRotated += 0.01;
 	renderScene();
 }
