@@ -524,7 +524,7 @@ void renderScene(void) {
 	placeCam(viewPosition[0], viewPosition[1], viewPosition[2], 0, 0, -5);
 	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, angle));
 	multiplyMatrix(viewMatrix, rotationMatrix(1.0f, 0.0f, 0.0f, angle2));
-	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, -yRotated));
+	multiplyMatrix(viewMatrix, rotationMatrix(0.0f, 1.0f, 0.0f, yRotated));
 	setIdentMatrix(T, 4);
 	setScale(T, 0.5, 0.5, 0.5);
 	multiplyMatrix(viewMatrix, T);
@@ -695,6 +695,30 @@ void mouseButton(int button, int state, int x, int y)
 	}
 }
 
+void keyPress(unsigned char key, int x, int y) {
+	//printf("%c", key);
+	switch (key) {
+		case 'a':
+			printf("key a pressed\n");
+			vertexFileName = "vertex.txt";
+			fragmentFileName = "frag.txt";
+			p = initShaders();
+			break;
+		case 'p':
+			printf("key p pressed\n");
+			vertexFileName = "vertex_phong.txt";
+			fragmentFileName = "frag_phong.txt";
+			p = initShaders();
+			break;
+		case 'g':
+			printf("key g pressed\n");
+			vertexFileName = "vertex_gouraud.txt";
+			fragmentFileName = "frag_gouraud.txt";
+			p = initShaders();
+			break;
+	}
+}
+
 void init(){
 	viewPosition[0] = 0;
 	viewPosition[1] = 0;
@@ -723,6 +747,7 @@ int main(int argc, char **argv)
 
 
 	glutMouseFunc(mouseButton);
+	glutKeyboardFunc(keyPress);
 	glutMotionFunc(mouseMove);
  
 	// check if a particular extension is available on your platform
